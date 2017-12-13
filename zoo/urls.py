@@ -19,6 +19,6 @@ import cow
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('cow.urls')),
-    url(r'^cow/', include('cow.urls')),
+    # url(r'^', include('cow.urls')),
+    url(r'^asset/', include('cow.urls')),
 ]

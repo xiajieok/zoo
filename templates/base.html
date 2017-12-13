@@ -256,24 +256,24 @@ desired effect
             <!-- /.search form -->
 
             <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
+            <ul class="sidebar-menu" id="mainnav-menu">
                 <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="#"><i class="fa fa-home"></i> <span>首页</span></a></li>
+                <li class="active"><a href="/"><i class="fa fa-home"></i> <span>首页</span></a></li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-bank"></i> <span>资产信息</span> <i
+                    <a><i class="fa fa-bank"></i> <span>资产信息</span> <i
                             class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">资产列表</a></li>
+                    <ul class="treeview-menu ">
+                        <li><a href={% url 'asset_list' %}>资产列表</a></li>
                         <li><a href="#">分类视图</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-gears"></i> <span>配置管理</span> <i
+                    <a><i class="fa fa-gears"></i> <span>配置管理</span> <i
                             class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li><a href="#">Link in level 2</a></li>
-                        <li><a href="#">Link in level 2</a></li>
+                        <li><a href={% url 'asset_list' %}>Link in level 2</a></li>
+                        <li><a href={% url 'asset_list' %}>Link in level 2</a></li>
                     </ul>
                 </li>
             </ul>
@@ -286,21 +286,24 @@ desired effect
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Page Header
-                <small>Optional description</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol>
+            {% block page_header %}
+                <h1>
+                    Page Header
+                    <small>Optional description</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+                    <li class="active">Here</li>
+                </ol>
+            {% endblock %}
         </section>
 
         <!-- Main content -->
         <section class="content">
-
-            <!-- Your Page Content Here -->
-
+            {% block content %}
+                This is content...
+                <!-- Your Page Content Here -->
+            {% endblock %}
         </section>
         <!-- /.content -->
     </div>
@@ -406,5 +409,22 @@ desired effect
      Both of these plugins are recommended to enhance the
      user experience. Slimscroll is required when using the
      fixed layout. -->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var active_node = $("#mainnav-menu a[href='/asset/asset_list/']");
+        active_node.parent().parent().addClass("menu-open");
+        active_node.parent().parent().parent().addClass("active");
+        if (active_node.parent().parent().hasClass("collapse")) {
+            active_node.parent().parent().addClass("in");
+        }
+
+    });//end doc ready
+
+</script>
+
+{% block  bottom-js %}
+{% endblock %}
 </body>
 </html>

@@ -78,7 +78,7 @@ class Server(models.Model):
     hosted_on = models.ForeignKey('self', related_name='hosted_on_server', blank=True, null=True,on_delete=models.SET_NULL)  # for vitural server
     # sn = models.CharField(u'SN号',max_length=128)
     # management_ip = models.CharField(u'管理IP',max_length=64,blank=True,null=True)
-    # manufactory = models.ForeignKey(verbose_name=u'制造商',max_length=128,null=True, blank=True)
+    # manufactory = models.ForeignKey(verbose_name=u'制造商',max_length=128,null=True, blank=True,on_delete=models.SET_NULL)
     model = models.CharField(verbose_name=u'型号', max_length=128, null=True, blank=True)
     # 若有多个CPU，型号应该都是一致的，故没做ForeignKey
 
@@ -88,7 +88,7 @@ class Server(models.Model):
     # physical_disk_driver = models.ManyToManyField('Disk', verbose_name=u'硬盘',blank=True,null=True)
     # raid_adaptor = models.ManyToManyField('RaidAdaptor', verbose_name=u'Raid卡',blank=True,null=True)
     # memory
-    # ram_capacity = models.IntegerField(u'内存总大小GB',blank=True)
+    ram_capacity = models.IntegerField(u'内存总大小GB',blank=True,null=True)
     # ram = models.ManyToManyField('Memory', verbose_name=u'内存配置',blank=True,null=True)
 
     os_type = models.CharField(u'操作系统类型', max_length=64, blank=True, null=True)
@@ -134,7 +134,7 @@ class NetworkDevice(models.Model):
     vlan_ip = models.GenericIPAddressField(u'VlanIP', blank=True, null=True)
     intranet_ip = models.GenericIPAddressField(u'内网IP', blank=True, null=True)
     # sn = models.CharField(u'SN号',max_length=128,unique=True)
-    # manufactory = models.CharField(verbose_name=u'制造商',max_length=128,null=True, blank=True)
+    manufactory = models.CharField(verbose_name=u'制造商',max_length=128,null=True, blank=True)
     model = models.CharField(u'型号', max_length=128, null=True, blank=True)
     firmware = models.ForeignKey('Software', blank=True, null=True,on_delete=models.SET_NULL)
     port_num = models.SmallIntegerField(u'端口个数', null=True, blank=True)
@@ -225,7 +225,7 @@ class Disk(models.Model):
     asset = models.ForeignKey('Asset',on_delete=models.SET_NULL,null=True )
     sn = models.CharField(u'SN号', max_length=128, blank=True, null=True)
     slot = models.CharField(u'插槽位', max_length=64)
-    # manufactory = models.CharField(u'制造商', max_length=64,blank=True,null=True)
+    manufactory = models.CharField(u'制造商', max_length=64,blank=True,null=True)
     model = models.CharField(u'磁盘型号', max_length=128, blank=True, null=True)
     capacity = models.FloatField(u'磁盘容量GB')
     disk_iface_choice = (
