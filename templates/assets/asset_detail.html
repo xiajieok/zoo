@@ -1,10 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>hahah</title>
-</head>
-<body>
-hahhaa
-</body>
-</html>
+{% extends 'base.html' %}
+{% load custom %}
+{% block page_header %}
+    <h1>
+        资产详情
+        <small>{{ asset_obj.name }}</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">资产信息</a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">硬件</a></li>
+            <li><a href="#tab_3" data-toggle="tab">软件</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Dropdown <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li role="presentation"><a role="menuitem" tabindex="-1"
+                                               href="/asset/asset_list/{{ asset_obj.id }}/">资产信息</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">硬件</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">软件</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                </ul>
+            </li>
+            <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                <table class="table table-striped">
+                    <tr>
+                        <th>机器名称</th>
+                        <td>: &nbsp;{{ asset_obj.name }}</td>
+
+                        <th>运行状态</th>
+                        <td>:&nbsp;
+                            {% if asset_obj.status == 0 %}
+                                <span class="label label-success">运行中</span>
+                            {% elif asset_obj.status == 1 %}
+                                <span class="label label-primary">已下线</span>
+                            {% elif asset_obj.status == 2 %}
+                                <span class="label label-default">未知</span>
+                            {% elif asset_obj.status == 3 %}
+                                <span class="label label-danger">故障</span>
+                            {% elif asset_obj.status == 4 %}
+                                <span class="label label-info">备用</span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>业务线</th>
+                        <td>:&nbsp; {{ asset_obj.business_unit }}</td>
+                        <th>SN</th>
+                        <td>:&nbsp; {{ asset_obj.sn }}</td>
+
+                    </tr>
+                    <tr>
+                        <th>资产类型</th>
+                        <td>:&nbsp; {{ asset_obj.asset_type }}</td>
+                        <th>IDC</th>
+                        <td>: &nbsp;{{ asset_obj.idc }}</td>
+                    </tr>
+                    <tr>
+                        <th>业务IP</th>
+                        <td>:&nbsp; 123.56.23.199</td>
+                        <th>管理IP</th>
+                        <td>: &nbsp;192.168.1.30</td>
+                    </tr>
+
+
+                    <tr>
+                        <th>系统类型</th>
+                        <td>:&nbsp; {{ asset_obj.server.os_type }}</td>
+                        <th>系统版本</th>
+                        <td>:&nbsp; {{ asset_obj.server.os_release }} {{ asset_obj.server.os_distribution }}  </td>
+                    </tr>
+                    <tr>
+                        <th>内存</th>
+                        <td>: &nbsp;{{ asset_obj.ram_set.select_related | sum_size }} G</td>
+                        <th>磁盘</th>
+                        <td>:&nbsp; {{ asset_obj.disk_set.select_related | sum_size }} G</td>
+                    </tr>
+                    <tr>
+                        <th>CPU型号</th>
+                        <td>:&nbsp; {{ asset_obj.cpu.cpu_model }}</td>
+                        <th>CPU核数</th>
+                        <td>:&nbsp; {{ asset_obj.cpu.cpu_count }} 颗 {{ asset_obj.cpu.cpu_core_count }} 核</td>
+                    </tr>
+
+                    <tr>
+                        <th>厂商</th>
+                        <td>: &nbsp;{{ asset_obj.manufactory }}</td>
+                        <th>型号</th>
+                        <td>:&nbsp; {{ asset_obj.model }}</td>
+                    </tr>
+                    <tr>
+                        <th>购买时间</th>
+                        <td>:&nbsp; {{ asset_obj.trade_date }}</td>
+                        <th>过保时间</th>
+                        <td>: &nbsp;{{ asset_obj.expire_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>管理员</th>
+                        <td>: &nbsp;root</td>
+                        <th>更新时间</th>
+                        <td>:&nbsp; {{ asset_obj.update_date }}</td>
+                    </tr>
+
+                </table>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane " id="tab_2">
+                The European languages are members of the same family. Their separate existence is a myth.
+                For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
+                in their grammar, their pronunciation and their most common words. Everyone realizes why a
+                new common language would be desirable: one could refuse to pay expensive translators. To
+                achieve this, it would be necessary to have uniform grammar, pronunciation and more common
+                words. If several languages coalesce, the grammar of the resulting language is more simple
+                and regular than that of the individual languages.
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_3">
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+{% endblock %}
+{% block bottom-js %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var active_node = $("#mainnav-menu a[href='" + "{% url 'asset_list' %}" + "']");
+            active_node.parent().parent().addClass("menu-open");
+            active_node.parent().parent().parent().addClass("active");
+            if (active_node.parent().parent().hasClass("collapse")) {
+                active_node.parent().parent().addClass("in");
+            }
+
+        });//end doc ready
+
+    </script>
+{% endblock %}

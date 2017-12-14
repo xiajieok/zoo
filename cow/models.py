@@ -24,8 +24,8 @@ class Asset(models.Model):
     name = models.CharField(max_length=64, unique=True)
     sn = models.CharField(u'资产SN号', max_length=128, unique=True)
     manufactory = models.ForeignKey('Manufactory', verbose_name=u'制造商', null=True, blank=True,on_delete=models.SET_NULL)
-    # model = models.ForeignKey('ProductModel', verbose_name=u'型号')
-    # model = models.CharField(u'型号',max_length=128,null=True, blank=True )
+    # model = models.ForeignKey('ProductModel', verbose_name=u'型号',on_delete=models.SET_NULL)
+    model = models.CharField(u'型号',max_length=128,null=True, blank=True )
 
     management_ip = models.GenericIPAddressField(u'管理IP', blank=True, null=True)
 
@@ -45,7 +45,6 @@ class Asset(models.Model):
                       (4, '备用'),
                       )
     status = models.SmallIntegerField(choices=status_choices, default=0)
-    # status = models.ForeignKey('Status', verbose_name = u'设备状态',default=1)
     # Configuration = models.OneToOneField('Configuration',verbose_name='配置管理',blank=True,null=True)
 
     memo = models.TextField(u'备注', null=True, blank=True)
@@ -203,7 +202,7 @@ class RAM(models.Model):
     sn = models.CharField(u'SN号', max_length=128, blank=True, null=True)
     model = models.CharField(u'内存型号', max_length=128)
     slot = models.CharField(u'插槽', max_length=64)
-    capacity = models.IntegerField(u'内存大小(MB)')
+    capacity = models.IntegerField(u'内存大小(GB)')
     memo = models.CharField(u'备注', max_length=128, blank=True, null=True)
     create_date = models.DateTimeField(blank=True, auto_now_add=True)
     update_date = models.DateTimeField(blank=True, null=True)

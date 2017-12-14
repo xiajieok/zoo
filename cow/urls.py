@@ -20,5 +20,6 @@ from cow import views
 urlpatterns = [
     # url(r'^', views.index),
     url(r'^asset_list/$', views.asset_list, name="asset_list"),
+    url(r'^asset_list/(\d+)/$', views.asset_detail, name="asset_detail"),
     url(r'^asset_list/category/$', views.asset_category, name="asset_category"),
 ]

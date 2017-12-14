@@ -30,7 +30,11 @@ def more(value, post_id):
         return value.split(more_str)[0] + '<a href="/post/{0}">查看全文...</a>'.format(post_id)
     return value
 
-
+@register.filter
+def sum_size(data_set):
+    total_val = sum([i.capacity if i.capacity else 0 for i in data_set])
+    # res = int(total_val/1024)
+    return total_val
 # register = template.Library()  # 自定义filter时必须加上
 #
 #

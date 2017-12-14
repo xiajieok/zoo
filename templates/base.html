@@ -62,7 +62,7 @@ desired effect
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>A</b>LT</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-lg"><b>Cow</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -179,7 +179,7 @@ desired effect
                             <!-- The user image in the navbar-->
                             <img src="/static/AdminLTE-2.3.3/dist/img/user.png" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Medivh</span>
+                            <span class="hidden-xs">{{ user.username }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -237,7 +237,7 @@ desired effect
                     <img src="/static/AdminLTE-2.3.3/dist/img/user.png" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Medivh</p>
+                    <p>{{ user.username }}</p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -265,7 +265,7 @@ desired effect
                             class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu ">
                         <li><a href={% url 'asset_list' %}>资产列表</a></li>
-                        <li><a href="#">分类视图</a></li>
+                        <li><a href="{% url 'asset_category' %}">分类视图</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -413,7 +413,7 @@ desired effect
 
     $(document).ready(function () {
 
-        var active_node = $("#mainnav-menu a[href='/asset/asset_list/']");
+        var active_node = $("#mainnav-menu a[href='{{ request.path }}']");
         active_node.parent().parent().addClass("menu-open");
         active_node.parent().parent().parent().addClass("active");
         if (active_node.parent().parent().hasClass("collapse")) {
