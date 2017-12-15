@@ -1,10 +1,10 @@
-from django.shortcuts import render, HttpResponse,HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from cow import models
 import cow.asset_handle as asset_handle
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
-
+import json
 
 # Create your views here.
 
@@ -27,6 +27,8 @@ def pages(request, q_all, num):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
     return posts
+
+
 def acc_login(request):
     '''
     登录,如果没有登录就先登录
@@ -57,6 +59,7 @@ def acc_logout(request):
     logout(request)
     return HttpResponseRedirect('/blog')
 
+
 def index(resquest):
     return render(resquest, 'index.html')
 
@@ -75,17 +78,28 @@ def asset_detail(request, asset_id):
     if request.method == 'GET':
         try:
             asset_obj = models.Asset.objects.get(id=asset_id)
-            pass
         except  ObjectDoesNotExist as e:
             print(e)
-            pass
         return render(request, 'assets/asset_detail.html', {'asset_obj': asset_obj})
 
-    pass
 
-
-def asset_category(request):
-    type = request.GET.get('category_type')
+def asset_category(request, type):
+    # res = request.get_all_path()
+    # print(res)
     print(type)
+    try:
+        type = type
+    except Exception as e:
+        type = 'server'
+        print(type)
 
-    return render(request, 'assets/asset_category.html', {'type': type})
+    assets = asset_handle.fetch_asset_list(type)
+    obj = models.Asset.objects.all()
+    data = pages(request, obj, 10)
+    print(obj)
+    return render(request, 'assets/asset.html', {'assets': assets, 'posts': data})
+    # return HttpResponse('hahaha')
+def get_dashboard_data(request):
+    dashboard_data = AssetDashboard(request)
+    dashboard_data.searilize_page()
+    return HttpResponse(json.dumps(dashboard_data.data))

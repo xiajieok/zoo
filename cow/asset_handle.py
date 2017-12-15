@@ -5,8 +5,8 @@ import os
 from cow import models
 
 
-def fetch_asset_list():
-    objs = models.Asset.objects.all()
+def fetch_asset_list(args):
+    objs = models.Asset.objects.filter(asset_type=args)
     res_list = []
     for obj in objs:
         if obj.asset_type == 'server':

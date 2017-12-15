@@ -16,11 +16,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 import cow
+from zoo import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^', include('cow.urls')),
+    url(r'^$', views.index, name="dashboard"),
     url(r'^asset/', include('cow.urls')),
     url(r'^login/', cow.views.acc_login, name='login'),
     url(r'^logout/', cow.views.acc_logout, name='logout'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^dashboard_data/', cow.views.get_dashboard_data, name="get_dashboard_data"),
 ]

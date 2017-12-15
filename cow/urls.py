@@ -13,13 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 from django.contrib import admin
 from cow import views
 
 urlpatterns = [
     # url(r'^', views.index),
-    url(r'^asset_list/$', views.asset_list, name="asset_list"),
-    url(r'^asset_list/(\d+)/$', views.asset_detail, name="asset_detail"),
-    url(r'^asset_list/category/$', views.asset_category, name="asset_category"),
+    url(r'^category/(.+)?/$', views.asset_category, name="category"),
+    url(r'^list/(\d+)/$', views.asset_detail, name="detail"),
+
+    # url(r'^asset_list/(\d+)/$', views.asset_detail, name="asset_list"),
+    # url(r'^asset_list/category/$', views.asset_category, name="asset_category"),
 ]
+
+
+
+
+
+
+
+# urlpatterns = [
+#     # url(r'^', views.index),
+#     url(r'^asset_list/$', views.asset_list, name="asset_list"),
+#     url(r'^asset_list/(\d+)/$', views.asset_detail, name="asset_list"),
+#     url(r'^asset_list/category/$', views.asset_category, name="asset_category"),
+# ]

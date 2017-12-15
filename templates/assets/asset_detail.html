@@ -22,14 +22,16 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li role="presentation"><a role="menuitem" tabindex="-1"
-                                               href="/asset/asset_list/{{ asset_obj.id }}/">资产信息</a></li>
+                                               href="/asset/list/{{ asset_obj.id }}/">资产信息</a></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">硬件</a></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">软件</a></li>
                     <li role="presentation" class="divider"></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
                 </ul>
             </li>
-            <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+            <li class="pull-right">
+                <button id="back" class="btn btn-block btn-info ">Back</button>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -136,17 +138,21 @@
 {% endblock %}
 {% block bottom-js %}
     <script type="text/javascript">
+        $("#back").click(function () {
+            window.history.back();
+        });
 
-        $(document).ready(function () {
 
-            var active_node = $("#mainnav-menu a[href='" + "{% url 'asset_list' %}" + "']");
-            active_node.parent().parent().addClass("menu-open");
-            active_node.parent().parent().parent().addClass("active");
-            if (active_node.parent().parent().hasClass("collapse")) {
-                active_node.parent().parent().addClass("in");
-            }
-
-        });//end doc ready
+        {#        $(document).ready(function () {#}
+        {##}
+        {#            var active_node = $("#mainnav-menu a[href='" + "{% url 'list' %}" + "']");#}
+        {#            active_node.parent().parent().addClass("menu-open");#}
+        {#            active_node.parent().parent().parent().addClass("active");#}
+        {#            if (active_node.parent().parent().hasClass("collapse")) {#}
+        {#                active_node.parent().parent().addClass("in");#}
+        {#            }#}
+        {##}
+        {#        });//end doc ready#}
 
     </script>
 {% endblock %}
