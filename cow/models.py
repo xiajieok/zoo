@@ -71,7 +71,7 @@ class Server(models.Model):
         ('auto', 'Auto'),
         ('manual', 'Manual'),
     )
-    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="服务器类型", default=0)
+    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="设备类型", default=0)
     created_by = models.CharField(choices=created_by_choices, max_length=32,
                                   default='auto')  # auto: auto created,   manual:created manually
     hosted_on = models.ForeignKey('self', related_name='hosted_on_server', blank=True, null=True,on_delete=models.SET_NULL)  # for vitural server
@@ -112,7 +112,7 @@ class SecurityDevice(models.Model):
         (2, '互联网网关'),
         (4, '运维审计系统'),
     )
-    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="服务器类型", default=0)
+    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="设备类型", default=0)
 
     def __str__(self):
         return self.asset.id
@@ -128,7 +128,7 @@ class NetworkDevice(models.Model):
         (2, '负载均衡'),
         (4, 'VPN设备'),
     )
-    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="服务器类型", default=0)
+    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="设备类型", default=0)
 
     vlan_ip = models.GenericIPAddressField(u'VlanIP', blank=True, null=True)
     intranet_ip = models.GenericIPAddressField(u'内网IP', blank=True, null=True)
@@ -154,7 +154,7 @@ class Software(models.Model):
         (2, '业务软件'),
 
     )
-    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="服务器类型", default=0)
+    sub_asset_type = models.SmallIntegerField(choices=sub_assset_type_choices, verbose_name="设备类型", default=0)
     license_num = models.IntegerField(verbose_name="授权数")
     # os_distribution_choices = (('windows','Windows'),
     #                            ('centos','CentOS'),

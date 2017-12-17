@@ -2,13 +2,20 @@
 
 {% block content %}
 
-    haha
+    <div class="row">
+    <div class="panel col-md-7">
+        <div class="panel-body" >
+            <div id="asset_categories" style="width: 600px;height:400px;"></div>
+        </div>
+    </div>
+    </div>
+
 {% endblock %}
 
 {% block bottom-js %}
-<script src="/static/plugins/echart/echarts.js"></script>
+<script src="/static/plugin/echart/echarts.js"></script>
 <!-- 引入 vintage 主题 -->
-<script src="/static/plugins/echart/infographic.js"></script>
+<script src="/static/plugin/echart/infographic.js"></script>
 <script>
 // 第二个参数可以指定前面引入的主题
     $(document).ready(function ()
@@ -29,7 +36,7 @@
         chart.setOption({
             title: {
                 text: '资产分类统计',
-                subtext: '老男孩Python'
+                subtext: '基本统计'
             },
             tooltip: {},
             legend: {

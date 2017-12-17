@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
 import json
 
+
 # Create your views here.
 
 
@@ -99,7 +100,14 @@ def asset_category(request, type):
     print(obj)
     return render(request, 'assets/asset.html', {'assets': assets, 'posts': data})
     # return HttpResponse('hahaha')
+
+from cow.dashboard import AssetDashboard
+
+
 def get_dashboard_data(request):
     dashboard_data = AssetDashboard(request)
     dashboard_data.searilize_page()
-    return HttpResponse(json.dumps(dashboard_data.data))
+    res = json.dumps(dashboard_data.data)
+    print(res)
+
+    return HttpResponse(res)
