@@ -176,6 +176,7 @@ class NewAssetApprovalZoneAdmin(admin.ModelAdmin):
 admin.site.register(models.Asset)
 admin.site.register(models.Server)
 admin.site.register(models.NetworkDevice)
+admin.site.register(models.SecurityDevice)
 admin.site.register(models.IDC)
 admin.site.register(models.BusinessUnit)
 admin.site.register(models.Contract)

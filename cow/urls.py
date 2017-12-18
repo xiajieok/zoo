@@ -19,6 +19,9 @@ from cow import views
 
 urlpatterns = [
     # url(r'^', views.index),
+    # url(r'report/$', views.asset_report, name='asset_report'),
+    # url(r'report/bulk_create/$',views.bulk_create_assets,name='bulk_create_assets' ),
+    # url(r'report/asset_with_no_asset_id/$', views.asset_with_no_asset_id, name='acquire_asset_id'),
     url(r'^category/(.+)?/$', views.asset_category, name="category"),
     url(r'^list/(\d+)/$', views.asset_detail, name="detail"),
 

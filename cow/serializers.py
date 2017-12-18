@@ -14,7 +14,7 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Asset
         depth=2
-        fields = ('name', 'sn','server','networkdevice','securitydevice')
+        fields = ('name', 'sn','server','networkdevice','securitydevice','storagedevice')
 
 
 class ServerSerializer(serializers.ModelSerializer):
