@@ -6,6 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
 import json
 from client import core
+from django.forms.models import model_to_dict
+
 
 # Create your views here.
 
@@ -85,21 +87,13 @@ def asset_detail(request, asset_id):
 
 
 def asset_category(request, type):
-    # res = request.get_all_path()
-    # print(res)
-    print(type)
-    try:
-        type = type
-    except Exception as e:
-        type = 'server'
-        print(type)
-
     assets = asset_handle.fetch_asset_list(type)
     obj = models.Asset.objects.all()
     data = pages(request, obj, 10)
     print(obj)
     return render(request, 'assets/asset.html', {'assets': assets, 'posts': data})
     # return HttpResponse('hahaha')
+
 
 from cow.dashboard import AssetDashboard
 
@@ -111,6 +105,8 @@ def get_dashboard_data(request):
     print(res)
 
     return HttpResponse(res)
+
+
 def asset_report(request):
     print(request.GET)
     if request.method == 'POST':
@@ -126,3 +122,42 @@ def asset_report(request):
         # return HttpResponse(json.dumps(ass_handler.response))
 
     return HttpResponse('--test--')
+
+
+def asset_with_no_asset_id(request):
+    if request.method == 'GET':
+        print('开始获取ID')
+        res = models.Asset.objects.order_by('-id').values('id')[0:1]
+        next_id = int(list(res)[0]['id']) + 1
+        return HttpResponse(next_id)
+    else:
+        data = request.POST
+        print(data)
+        asset_sn = data.get('sn')
+        asset_already_in_approval_zone = models.NewAssetApprovalZone.objects.get_or_create(sn=asset_sn,
+                                                                                           data=json.dumps(
+                                                                                                   data),
+                                                                                           manufactory=data.get(
+                                                                                                   'manufactory'),
+                                                                                           model=data.get(
+                                                                                                   'model'),
+                                                                                           asset_type=data.get(
+                                                                                                   'asset_type'),
+                                                                                           ram_size=data.get(
+                                                                                                   'ram_size'),
+                                                                                           cpu_model=data.get(
+                                                                                                   'cpu_model'),
+                                                                                           cpu_count=data.get(
+                                                                                                   'cpu_count'),
+                                                                                           cpu_core_count=data.get(
+                                                                                                   'cpu_core_count'),
+                                                                                           os_distribution=data.get(
+                                                                                                   'os_distribution'),
+                                                                                           os_release=data.get(
+                                                                                                   'os_release'),
+                                                                                           os_type=data.get(
+                                                                                                   'os_type'),
+
+                                                                                           )
+        print(asset_already_in_approval_zone)
+        return HttpResponse('200')

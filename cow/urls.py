@@ -21,7 +21,8 @@ urlpatterns = [
     # url(r'^', views.index),
     # url(r'report/$', views.asset_report, name='asset_report'),
     # url(r'report/bulk_create/$',views.bulk_create_assets,name='bulk_create_assets' ),
-    # url(r'report/asset_with_no_asset_id/$', views.asset_with_no_asset_id, name='acquire_asset_id'),
+    url(r'^new_asset/$', views.asset_with_no_asset_id, name="new_asset"),
+    url(r'^new_assets/approval/$', views.new_assets_approval, name="new_assets_approval"),
     url(r'^category/(.+)?/$', views.asset_category, name="category"),
     url(r'^list/(\d+)/$', views.asset_detail, name="detail"),
 

@@ -261,39 +261,21 @@ desired effect
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
                 <li class="active">
-              <a href="#"><i class="fa fa-bank"></i> 资产信息 <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu menu-open" style="display: block;">
-                <li><a href="/asset/category/server/"><i class="fa fa-th"></i> IDC信息</a></li>
-                <li class="active">
-                  <a href="#"> 分类视图 <i class="fa fa-angle-left pull-right"></i></a>
-                  <ul class="treeview-menu menu-open" style="display: block;">
-                    <li><a href="/asset/category/server/"> 服务器</a></li>
-                    <li><a href="/asset/category/networkdevice/">网络设备</a></li>
-                    <li><a href="/asset/category/storagedevice/">存储设备</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-{#                <li class="treeview">#}
-{#                    <a><i class="fa fa-bank"></i> <span>资产信息</span> <i#}
-{#                            class="fa fa-angle-left pull-right"></i></a>#}
-{#                    <ul class="treeview-menu ">#}
-{#                        <a><span>分类视图</span><i class="fa fa-angle-left pull-right"></i></a>#}
-{#                        <ul class="treeview-menu ">#}
-{#                            <li><a href="{% url 'category' %}">服务器</a></li>#}
-{#                            <li><a href="{% url 'category' %}">网络设备</a></li>#}
-{#                            <li><a href="{% url 'category' %}">安全设备</a></li>#}
-{#                        </ul>#}
-{#                    </ul>#}
-{#                </li>#}
-                <li class="treeview">
-                    <a><i class="fa fa-gears"></i> <span>配置管理</span> <i
-                            class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu">
-                        {#                        <li><a href={% url 'asset_list' %}>Link in level 2</a></li>#}
-                        {#                        <li><a href={% url 'asset_list' %}>Link in level 2</a></li>#}
+                    <a href="#"><i class="fa fa-bank"></i> 资产信息 <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display: block;">
+                        <li><a href="/asset/category/server/"><i class="fa fa-th"></i> 待处理资产</a></li>
+                        <li><a href="/asset/category/all/"><i class="fa fa-server"></i> 设备列表</a></li>
+
                     </ul>
                 </li>
+            </ul>
+            </li>
+            <li class="treeview">
+                <a><i class="fa fa-gears"></i> <span>配置管理</span> <i
+                        class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                </ul>
+            </li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>

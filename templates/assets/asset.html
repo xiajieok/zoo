@@ -15,9 +15,16 @@
 
         <div class="row">
             <div class="col-sm-12">
+{#                <div class="col-md-4">#}
+                    <span class="btn btn-default"><a href="/asset/category/all/"> 所有</a></span>
+                    <span class="btn btn-default"><a href="/asset/category/server/"> 服务器</a></span>
+                    <span class="btn btn-default"><a href="/asset/category/networkdevice/">网络设备</a></span>
+                    <span class="btn btn-default"><a href="/asset/category/storagedevice/">存储设备</a></span>
+{#                </div>#}
                 <table id="example2" class="table table-bordered table-hover dataTable"
                        role="grid"
                        aria-describedby="example2_info">
+
                     <thead>
                     <tr role="row">
                         <th>Name</th>
@@ -25,7 +32,7 @@
                         <th>设备类型</th>
                         <th>业务线</th>
                         <th>管理员</th>
-{#                        <th>虚拟/物理</th>#}
+                        {#                        <th>虚拟/物理</th>#}
                         <th>IDC</th>
                         <th>状态</th>
                         <th>更新时间</th>
@@ -42,7 +49,7 @@
                             <td>{{ i.business_unit }}</td>
 
                             <td>{{ i.name }}</td>
-{#                            <td>{{ i.name }}</td>#}
+                            {#                            <td>{{ i.name }}</td>#}
                             <td>{{ i.idc }}</td>
                             {#                                    <td>{{ i.manufactory }}</td>#}
                             <td>
@@ -67,45 +74,45 @@
                     </tbody>
 
                 </table>
-            <div class="col-sm-5">
-                            <div class="dataTables_info" id="example2_info" role="status"
-                                 aria-live="polite">Showing 1 to
-                                {% if assets.data|length < 10 %}
-                                    {{ assets.data|length }}
-                                {% else %}
-                                    10
+                <div class="col-sm-5">
+                    <div class="dataTables_info" id="example2_info" role="status"
+                         aria-live="polite">Showing 1 to
+                        {% if assets.data|length < 10 %}
+                            {{ assets.data|length }}
+                        {% else %}
+                            10
+                        {% endif %}
+                        of {{ assets.data|length }} entries
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="nav-divider">
+                        <nav style="float: right">
+                            <ul class="pagination">
+                                {% if posts.has_previous %}
+                                    <li class="">
+                                        <a href="?page={{ posts.previous_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
                                 {% endif %}
-                                of {{ assets.data|length }} entries
-                            </div>
-                        </div>
-              <div class="col-sm-7">
-                            <div class="nav-divider">
-                                <nav style="float: right">
-                                    <ul class="pagination">
-                                        {% if posts.has_previous %}
-                                            <li class="">
-                                                <a href="?page={{ posts.previous_page_number }}"
-                                                   aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        {% for page_num in posts.paginator.page_range %}
-                                            {% guess_page posts.number page_num %}
-                                        {% endfor %}
-                                        {% if posts.has_next %}
-                                            <li class="">
-                                                <a href="?page={{ posts.next_page_number }}"
-                                                   aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </nav>
+                                {% for page_num in posts.paginator.page_range %}
+                                    {% guess_page posts.number page_num %}
+                                {% endfor %}
+                                {% if posts.has_next %}
+                                    <li class="">
+                                        <a href="?page={{ posts.next_page_number }}"
+                                           aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
 
-                            </div>
-                        </div>
+                    </div>
+                </div>
             </div>
         </div>        <!-- nav-tabs-custom -->
     </div>

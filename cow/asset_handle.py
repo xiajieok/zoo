@@ -6,7 +6,10 @@ from cow import models
 
 
 def fetch_asset_list(args):
-    objs = models.Asset.objects.filter(asset_type=args)
+    if args == 'all':
+        objs = models.Asset.objects.all()
+    else:
+        objs = models.Asset.objects.filter(asset_type=args)
     res_list = []
     for obj in objs:
         if obj.asset_type == 'server':
