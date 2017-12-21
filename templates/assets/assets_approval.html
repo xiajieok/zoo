@@ -21,16 +21,17 @@
 
                     <thead>
                     <tr role="row">
-{#                        <th>Name</th>#}
+                        <th>选择</th>
+                        <th>ID</th>
                         <th>SN</th>
                         <th>设备类型</th>
                         <th>型号</th>
                         <th>厂家</th>
                         <th>CPU</th>
-                        {#                        <th>虚拟/物理</th>#}
                         <th>RAM</th>
                         <th>OS</th>
                         <th>更新时间</th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -38,7 +39,8 @@
                     {% for i in asset_data %}
                         <tr role="row" class="even">
 
-{#                            <td><a href="/asset/list/{{ i.id }}">{{ i.name }}</a></td>#}
+                            <td><label><input type="checkbox"> </label></td>
+                            <td>{{ i.id }}</td>
                             <td>{{ i.sn }}</td>
                             <td>{{ i.asset_type }}</td>
                             <td>{{ i.model }}</td>
@@ -46,32 +48,37 @@
 
                             <td>{{ i.cpu_model }} * {{ i.cpu_count }}</td>
                             {#                            <td>{{ i.name }}</td>#}
-                            <td>{{ i.ram_size  }} </td>
-                            <td>{{ i.os_type  }} </td>
+                            <td>{{ i.ram_size }} </td>
+                            <td>{{ i.os_type }} </td>
                             {#                                    <td>{{ i.manufactory }}</td>#}
-{#                            <td>#}
-{#                                {% if i.status == '在线' %}#}
-{#                                    <span class="label label-success">运行中</span>#}
-{#                                {% elif i.status == '已下线' %}#}
-{#                                    <span class="label label-primary">已下线</span>#}
-{#                                {% elif i.status == '未知' %}#}
-{#                                    <span class="label label-default">未知</span>#}
-{#                                {% elif i.status == '故障' %}#}
-{#                                    <span class="label label-danger">故障</span>#}
-{#                                {% elif i.status == '备用' %}#}
-{#                                    <span class="label label-info">备用</span>#}
-{##}
-{#                                {% endif %}#}
-{#                            </td>#}
+                            {#                            <td>#}
+                            {#                                {% if i.status == '在线' %}#}
+                            {#                                    <span class="label label-success">运行中</span>#}
+                            {#                                {% elif i.status == '已下线' %}#}
+                            {#                                    <span class="label label-primary">已下线</span>#}
+                            {#                                {% elif i.status == '未知' %}#}
+                            {#                                    <span class="label label-default">未知</span>#}
+                            {#                                {% elif i.status == '故障' %}#}
+                            {#                                    <span class="label label-danger">故障</span>#}
+                            {#                                {% elif i.status == '备用' %}#}
+                            {#                                    <span class="label label-info">备用</span>#}
+                            {##}
+                            {#                                {% endif %}#}
+                            {#                            </td>#}
                             <td>{{ i.date |date:"Y-m-d H:i:s" }}</td>
 
                         </tr>
                     {% endfor %}
 
                     </tbody>
+                    <tfoot>
+                    <button class="btn btn-info ">批准</button>
+                    </tfoot>
 
                 </table>
+
                 <div class="col-sm-5">
+
                     <div class="dataTables_info" id="example2_info" role="status"
                          aria-live="polite">Showing 1 to
                         {% if assets.data|length < 10 %}
@@ -81,6 +88,8 @@
                         {% endif %}
                         of {{ assets.data|length }} entries
                     </div>
+
+
                 </div>
                 <div class="col-sm-7">
                     <div class="nav-divider">
