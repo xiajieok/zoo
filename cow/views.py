@@ -160,4 +160,11 @@ def asset_with_no_asset_id(request):
 
                                                                                            )
         print(asset_already_in_approval_zone)
-        return HttpResponse('200')
+
+    return HttpResponse('200')
+
+
+def assets_approval(request):
+    obj = models.NewAssetApprovalZone.objects.all()
+
+    return render(request, 'assets/assets_approval.html', {'asset_data': obj})

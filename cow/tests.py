@@ -1,13 +1,7 @@
-from django.test import TestCase
+import requests,os
 
-# Create your tests here.
-# !/usr/bin/python
-# -*- coding: UTF-8 -*-
-i = 1
-while i < 10:
-    i += 1
-    if i % 2 > 0:
-        continue
-    print(i)
-
-print(i)
+with open('sss.txt','r') as f:
+    for i in f.readlines():
+        i = 'http://' + i.strip()
+        res = requests.get(i,)
+        print(res.status_code)
