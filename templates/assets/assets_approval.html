@@ -39,7 +39,8 @@
                     {% for i in asset_data %}
                         <tr role="row" class="even">
 
-                            <td><label><input type="checkbox"> </label></td>
+                            {#                            <td><label><input type="checkbox"> </label></td>#}
+                            <td><input type="checkbox" name="check"/></td>
                             <td>{{ i.id }}</td>
                             <td>{{ i.sn }}</td>
                             <td>{{ i.asset_type }}</td>
@@ -50,43 +51,32 @@
                             {#                            <td>{{ i.name }}</td>#}
                             <td>{{ i.ram_size }} </td>
                             <td>{{ i.os_type }} </td>
-                            {#                                    <td>{{ i.manufactory }}</td>#}
-                            {#                            <td>#}
-                            {#                                {% if i.status == '在线' %}#}
-                            {#                                    <span class="label label-success">运行中</span>#}
-                            {#                                {% elif i.status == '已下线' %}#}
-                            {#                                    <span class="label label-primary">已下线</span>#}
-                            {#                                {% elif i.status == '未知' %}#}
-                            {#                                    <span class="label label-default">未知</span>#}
-                            {#                                {% elif i.status == '故障' %}#}
-                            {#                                    <span class="label label-danger">故障</span>#}
-                            {#                                {% elif i.status == '备用' %}#}
-                            {#                                    <span class="label label-info">备用</span>#}
-                            {##}
-                            {#                                {% endif %}#}
-                            {#                            </td>#}
+
                             <td>{{ i.date |date:"Y-m-d H:i:s" }}</td>
 
                         </tr>
                     {% endfor %}
 
                     </tbody>
-                    <tfoot>
-                    <button class="btn btn-info ">批准</button>
-                    </tfoot>
+
 
                 </table>
 
                 <div class="col-sm-5">
 
                     <div class="dataTables_info" id="example2_info" role="status"
-                         aria-live="polite">Showing 1 to
+                         aria-live="polite">
+
+
+                        Showing 1 to
                         {% if assets.data|length < 10 %}
                             {{ assets.data|length }}
                         {% else %}
                             10
                         {% endif %}
                         of {{ assets.data|length }} entries
+                        <button class="btn btn-info " onclick="OK()">批准</button>
+
                     </div>
 
 
@@ -127,9 +117,28 @@
 
 {% endblock %}
 {% block bottom-js %}
-    {#    <script>#}
-    {#        function New() {#}
-    {#            window.location.href = '/asset/category/networkdevice/';#}
-    {#        }#}
-    {#    </script>#}
+    <script>
+
+        function OK() {
+            id_list = new Array();
+
+            $('input:checkbox[name="check"]').each(function () //multiple checkbox的name
+            {
+                if ($(this).is(':checked')) {
+                    var id = $(this).parents('td').siblings('td').first().text()
+                    id_list.push(id)
+                }
+
+            });
+            $.ajax({
+                url: "/asset/assets_approval/",
+                type: 'POST',
+                data: {"ids": id_list},
+                success: function (data) {
+                    console.log('ok')
+                }
+            })
+
+        }
+    </script>
 {% endblock %}

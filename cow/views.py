@@ -7,6 +7,8 @@ from django.contrib.auth import login, logout, authenticate
 import json
 from client import core
 from django.forms.models import model_to_dict
+import datetime
+from cow import core
 
 
 # Create your views here.
@@ -165,6 +167,19 @@ def asset_with_no_asset_id(request):
 
 
 def assets_approval(request):
-    obj = models.NewAssetApprovalZone.objects.all()
+    if request.method == 'GET':
+        obj = models.NewAssetApprovalZone.objects.filter(approved=False)
+        return render(request, 'assets/assets_approval.html', {'asset_data': obj})
+    else:
+        id_list = request.POST.getlist('ids[]')
+        obj_list = models.NewAssetApprovalZone.objects.filter(id__in=id_list)
 
-    return render(request, 'assets/assets_approval.html', {'asset_data': obj})
+        for obj in obj_list:
+            asset_handler = core.Asset(request)
+            if asset_handler.data_is_valid_without_id():
+                obj.approved = True
+                obj.approved_date = datetime.datetime.now()
+                obj.save()
+            else:
+                print('数据不完整')
+        return HttpResponse('ok')
