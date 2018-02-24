@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load custom %}
+{% block page_header %}
+    <h1>
+        服务编排
+        <small>Optional description</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">自动生成 or 上传yml文件</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>NameSpace</label>
+                <select class="form-control" id="namespace">
+                    <option selected="selected">default</option>
+                    <option>kube-system</option>
+                </select>
+                <label>Nodes</label>
+                <select class="form-control" id="node">
+                    <option selected="selected">All</option>
+                    <option>centos-minion-1</option>
+                    <option>centos-minion-2</option>
+                </select>
+                <label>App Name</label>
+                <p>
+                    <input type="text" name="AppName" placeholder="name" size="75px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                </p>
+                <label>Image</label>
+                <p>
+                    <input type="text" name="image" placeholder="image" size="75px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                </p>
+
+
+                <label>Service</label>
+                <p>
+                    <input type="text" name="port" size="36px" placeholder="port"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                    <input type="text" name="targetPort" value="" placeholder="targetPort" size="36px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                </p>
+
+
+                <label>Replicas</label>
+                <p>
+                    <input type="text" name="replicas" placeholder="number" size="75px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                </p>
+                <label>Resources</label>
+                <p>
+                    <input type="text" name="memory" placeholder="mem" size="36px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                    <input type="text" name="cpu" placeholder="cpu" size="36px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                </p>
+                <label>Volume</label>
+                <p>
+                    <input type="text" name="desc" placeholder="desc" size="36px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                    <input type="text" name="src" placeholder="src" size="36px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+
+                </p>
+                <button type="button" class="btn  btn-info btn-sm" onclick="submit()">Enter</button>
+                <button type="button" class="btn  btn-default btn-sm">Cancel</button>
+            </div>
+            <div style="float:left;height:500px; width:1px; border-left:1px #000 solid"></div>
+            <div class="col-md-5" style="float: left">
+                <p>
+                    <input type="text" name="username" value="Upload a YAML or JSON file*" size="50px"
+                           style="border:0px;border-bottom:#000000 1px solid;">
+                    <i class="fa fa-upload"></i>
+                </p>
+                <button type="button" class="btn  btn-info btn-sm">upload</button>
+                <button type="button" class="btn  btn-default btn-sm">cancel</button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+{% endblock %}
+{% block bottom-js %}
+
+    <script>
+        function submit() {
+            var data =
+            {
+                "namespace": $("#namespace").find("option:selected").text(),
+                "node": $("#node").find("option:selected").text(),
+                "AppName": $("*[name='AppName']").val(),
+                "image": $("*[name='image']").val(),
+                "replicas": $("*[name='replicas']").val(),
+                "port": $("*[name='port']").val(),
+                "targetPort": $("*[name='targetPort']").val(),
+                "mem": $("*[name='mem']").val(),
+                "cpu": $("*[name='cpu']").val(),
+                "desc": $("*[name='desc']").val(),
+                "src": $("*[name='src']").val()
+            }
+{#            json = JSON.stringify(data);#}
+{#            console.log(json);#}
+            $.ajax({
+                url: "cloud/format/",
+                type: 'POST',
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+            ;
+
+        }
+    </script>
+
+
+{% endblock %}

@@ -65,3 +65,78 @@ class Asset(object):
                 self.response_msg('error', 'AssetDataInvalid', str(e))
         else:
             self.response_msg('error', 'AssetDataInvalid', "The reported asset data is not valid or provided")
+
+    def get_asset_id_by_sn(self):
+        '''
+        When the client first time reports it's data to Server,
+        it doesn't know it's asset id yet,so it will come to the server asks for the asset it first,
+        then report the data again
+        '''
+        data = self.request.POST.get("asset_data")
+        print('获取的数据',data)
+        response = {}
+        if data:
+            try:
+                data = json.loads(data)
+                if self.mandatory_check(data,only_check_sn=True):  # the asset is already exist in DB,just return it's asset id to client
+                    response = {'asset_id': self.asset_obj.id}
+                else:
+                    if hasattr(self, 'waiting_approval'):
+                        response = {
+                            'needs_aproval': "this is a new asset,needs IT admin's approval to create the new asset id."}
+                        self.clean_data = data
+                        self.save_new_asset_to_approval_zone()
+                        print(response)
+                    else:
+                        response = self.response
+            except ValueError as e:
+                self.response_msg('error', 'AssetDataInvalid', str(e))
+                response = self.response
+        else:
+            self.response_msg('error', 'AssetDataInvalid', "The reported asset data is not valid or provided")
+            response = self.response
+        print('获取的新的或者旧的ID',response)
+        return response
+
+    def save_new_asset_to_approval_zone(self):
+        '''When find out it is a new asset, will save the data into approval zone to waiting for IT admin's approvals'''
+        asset_sn = self.clean_data.get('sn')
+        asset_already_in_approval_zone = models.NewAssetApprovalZone.objects.get_or_create(sn=asset_sn,
+                                                                                           data=json.dumps(
+                                                                                                   self.clean_data),
+                                                                                           manufactory=self.clean_data.get(
+                                                                                                   'manufactory'),
+                                                                                           model=self.clean_data.get(
+                                                                                                   'model'),
+                                                                                           asset_type=self.clean_data.get(
+                                                                                                   'asset_type'),
+                                                                                           ram_size=self.clean_data.get(
+                                                                                                   'ram_size'),
+                                                                                           cpu_model=self.clean_data.get(
+                                                                                                   'cpu_model'),
+                                                                                           cpu_count=self.clean_data.get(
+                                                                                                   'cpu_count'),
+                                                                                           cpu_core_count=self.clean_data.get(
+                                                                                                   'cpu_core_count'),
+                                                                                           os_distribution=self.clean_data.get(
+                                                                                                   'os_distribution'),
+                                                                                           os_release=self.clean_data.get(
+                                                                                                   'os_release'),
+                                                                                           os_type=self.clean_data.get(
+                                                                                                   'os_type'),
+
+                                                                                           )
+        return True
+    def data_is_valid(self):
+        data = self.request.POST.get("asset_data")
+        if data:
+            try:
+                data = json.loads(data)
+                self.mandatory_check(data)
+                self.clean_data = data
+                if not self.response['error']:
+                    return True
+            except ValueError as e:
+                self.response_msg('error', 'AssetDataInvalid', str(e))
+        else:
+            self.response_msg('error', 'AssetDataInvalid', "The reported asset data is not valid or provided")

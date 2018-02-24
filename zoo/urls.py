@@ -23,6 +23,7 @@ urlpatterns = [
     # url(r'^', include('cow.urls')),
     url(r'^$', views.index, name="dashboard"),
     url(r'^asset/', include('cow.urls')),
+    url(r'^cloud/', include('cow.cloud_urls')),
     url(r'^api/', include('cow.rest_urls') ),
     url(r'^login/', cow.views.acc_login, name='login'),
     url(r'^logout/', cow.views.acc_logout, name='logout'),
