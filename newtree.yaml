@@ -1,0 +1,6 @@
+AppName: admin
+Resources: {cpu: '2', mem: '1024'}
+image: tomcat
+namespace: default
+replicas: '10'
+service: {nodeport: 8080, port: 80}

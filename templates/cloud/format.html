@@ -59,7 +59,7 @@
                 </p>
                 <label>Resources</label>
                 <p>
-                    <input type="text" name="memory" placeholder="mem" size="36px"
+                    <input type="text" name="mem" placeholder="mem" size="36px"
                            style="border:0px;border-bottom:#000000 1px solid;">
                     <input type="text" name="cpu" placeholder="cpu" size="36px"
                            style="border:0px;border-bottom:#000000 1px solid;">
@@ -99,25 +99,28 @@
     <script>
         function submit() {
             var data =
-            {
-                "namespace": $("#namespace").find("option:selected").text(),
-                "node": $("#node").find("option:selected").text(),
-                "AppName": $("*[name='AppName']").val(),
-                "image": $("*[name='image']").val(),
-                "replicas": $("*[name='replicas']").val(),
-                "port": $("*[name='port']").val(),
-                "targetPort": $("*[name='targetPort']").val(),
-                "mem": $("*[name='mem']").val(),
-                "cpu": $("*[name='cpu']").val(),
-                "desc": $("*[name='desc']").val(),
-                "src": $("*[name='src']").val()
-            }
+                {
+                    namespace: $("#namespace").find("option:selected").text(),
+                    node: $("#node").find("option:selected").text(),
+                    AppName: $("*[name='AppName']").val(),
+                    image: $("*[name='image']").val(),
+                    replicas: $("*[name='replicas']").val(),
+                    port: $("*[name='port']").val(),
+                    targetPort: $("*[name='targetPort']").val(),
+                    mem: $("*[name='mem']").val(),
+                    cpu: $("*[name='cpu']").val(),
+                    desc: $("*[name='desc']").val(),
+                    src: $("*[name='src']").val()
+                }
+            console.log(data)
+            var json_str = JSON.stringify(data);
 {#            json = JSON.stringify(data);#}
 {#            console.log(json);#}
             $.ajax({
                 url: "cloud/format/",
                 type: 'POST',
-                data: data,
+                data: json_str,
+                contenType:"application/json",
                 success: function (data) {
                     console.log(data);
                 }

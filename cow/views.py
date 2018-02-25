@@ -9,7 +9,7 @@ from client import core
 from django.forms.models import model_to_dict
 import datetime
 from cow import core
-
+import yaml
 
 # Create your views here.
 
@@ -196,7 +196,26 @@ def cloud_node(request):
     return render(request, 'cloud/node.html')
 def cloud_format(request):
     if request.method == 'POST':
-        print(request.POST)
+        req = json.loads(request.body.decode('utf-8'))
+        print(req['namespace'])
+        tmp = {
+            'namespace':req['namespace'],
+            'AppName':req['AppName'],
+            'image':req['image'],
+            'replicas':req['replicas'],
+            'Resources':{
+                'cpu': req['cpu'],
+                'mem': req['mem'],
+            },
+            'service':{
+                'port':80,
+                'nodeport':8080,
+            }
+        }
+        f = open('newtree.yaml', "w")
+        new = yaml.dump(tmp,f)
+        f.close()
+        print(new)
         return HttpResponse('ok')
     else:
 
