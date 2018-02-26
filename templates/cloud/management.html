@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load custom %}
+{% block page_header %}
+    <h1>
+        服务管理
+        <small>Optional description</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">检查服务</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="box-body table-responsive no-padding">
+            <select id="namespace" >
+                {% for name,status in namespace_status.items %}
+                    <option >{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn-default" onclick="Space(this)">Enter</button>
+            <table class="table table-hover">
+                <tbody>
+
+                {% for pod,status in pod_status.items %}
+                    <tr>
+                        <td>{{ pod }}</td>
+                        <td><span class="label label-success">{{ status }}</span></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block bottom-js %}
+
+    <script>
+     function Space(obj){
+         var name = $("#namespace").val();
+            console.log(name)
+            $.ajax({
+                url: "/cloud/management/",
+                type: 'POST',
+                dataType:'json',
+                data: {type: 'query', name: name},
+                success: function (data) {
+                    console.log(data);
+                    var tmp = JSON.parse(data);
+                    console.log(tmp)
+                }
+            })
+     }
+
+    </script>
+
+
+{% endblock %}

@@ -123,6 +123,8 @@
                 contenType:"application/json",
                 success: function (data) {
                     console.log(data);
+                    var obj = eval('(' + data + ')');
+                    console.log(obj);
                 }
             })
             ;
