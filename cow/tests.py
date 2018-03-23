@@ -1,7 +1,10 @@
-import requests,os
+ss = {
+    'tom': 'cat',
+    'haha': 'enen'
+}
 
-with open('sss.txt','r') as f:
-    for i in f.readlines():
-        i = 'http://' + i.strip()
-        res = requests.get(i,)
-        print(res.status_code)
+if ss.get('v5'):
+    ss.pop('v5')
+    print('del ok')
+else:
+    print('None')

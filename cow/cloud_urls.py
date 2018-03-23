@@ -10,6 +10,7 @@ urlpatterns = [
     # url(r'^new_assets/approval/$', views.new_assets_approval, name="new_assets_approval"),
     url(r'^nodes/', views.cloud_node, name="node"),
     url(r'^format/', views.cloud_format, name="format"),
+    url(r'^management/', views.cloud_management, name="management"),
 
 
 

@@ -10,6 +10,8 @@ from django.forms.models import model_to_dict
 import datetime
 from cow import core
 import yaml
+import requests
+
 
 # Create your views here.
 
@@ -131,48 +133,48 @@ def asset_with_no_asset_id(request):
     if request.method == 'POST':
         asset_handler = core.Asset(request)
         res = asset_handler.get_asset_id_by_sn()
-        print('我是获取的SN',res)
+        print('我是获取的SN', res)
         return HttpResponse(json.dumps(res))
 
 
 
-    # if request.method == 'GET':
-    #     print('开始获取ID')
-    #     res = models.Asset.objects.order_by('-id').values('id')[0:1]
-    #     next_id = int(list(res)[0]['id']) + 1
-    #     return HttpResponse(next_id)
-    # else:
-    #     data = request.POST
-    #     print(data)
-    #     asset_sn = data.get('sn')
-    #     asset_already_in_approval_zone = models.NewAssetApprovalZone.objects.get_or_create(sn=asset_sn,
-    #                                                                                        data=json.dumps(
-    #                                                                                                data),
-    #                                                                                        manufactory=data.get(
-    #                                                                                                'manufactory'),
-    #                                                                                        model=data.get(
-    #                                                                                                'model'),
-    #                                                                                        asset_type=data.get(
-    #                                                                                                'asset_type'),
-    #                                                                                        ram_size=data.get(
-    #                                                                                                'ram_size'),
-    #                                                                                        cpu_model=data.get(
-    #                                                                                                'cpu_model'),
-    #                                                                                        cpu_count=data.get(
-    #                                                                                                'cpu_count'),
-    #                                                                                        cpu_core_count=data.get(
-    #                                                                                                'cpu_core_count'),
-    #                                                                                        os_distribution=data.get(
-    #                                                                                                'os_distribution'),
-    #                                                                                        os_release=data.get(
-    #                                                                                                'os_release'),
-    #                                                                                        os_type=data.get(
-    #                                                                                                'os_type'),
-    #
-    #                                                                                        )
-    #     print(asset_already_in_approval_zone)
-    #
-    # return HttpResponse('200')
+        # if request.method == 'GET':
+        #     print('开始获取ID')
+        #     res = models.Asset.objects.order_by('-id').values('id')[0:1]
+        #     next_id = int(list(res)[0]['id']) + 1
+        #     return HttpResponse(next_id)
+        # else:
+        #     data = request.POST
+        #     print(data)
+        #     asset_sn = data.get('sn')
+        #     asset_already_in_approval_zone = models.NewAssetApprovalZone.objects.get_or_create(sn=asset_sn,
+        #                                                                                        data=json.dumps(
+        #                                                                                                data),
+        #                                                                                        manufactory=data.get(
+        #                                                                                                'manufactory'),
+        #                                                                                        model=data.get(
+        #                                                                                                'model'),
+        #                                                                                        asset_type=data.get(
+        #                                                                                                'asset_type'),
+        #                                                                                        ram_size=data.get(
+        #                                                                                                'ram_size'),
+        #                                                                                        cpu_model=data.get(
+        #                                                                                                'cpu_model'),
+        #                                                                                        cpu_count=data.get(
+        #                                                                                                'cpu_count'),
+        #                                                                                        cpu_core_count=data.get(
+        #                                                                                                'cpu_core_count'),
+        #                                                                                        os_distribution=data.get(
+        #                                                                                                'os_distribution'),
+        #                                                                                        os_release=data.get(
+        #                                                                                                'os_release'),
+        #                                                                                        os_type=data.get(
+        #                                                                                                'os_type'),
+        #
+        #                                                                                        )
+        #     print(asset_already_in_approval_zone)
+        #
+        # return HttpResponse('200')
 
 
 def assets_approval(request):
@@ -192,31 +194,119 @@ def assets_approval(request):
             else:
                 print('数据不完整')
         return HttpResponse('ok')
+
+
 def cloud_node(request):
     return render(request, 'cloud/node.html')
+
+
 def cloud_format(request):
     if request.method == 'POST':
         req = json.loads(request.body.decode('utf-8'))
-        print(req['namespace'])
-        tmp = {
-            'namespace':req['namespace'],
-            'AppName':req['AppName'],
-            'image':req['image'],
-            'replicas':req['replicas'],
-            'Resources':{
-                'cpu': req['cpu'],
-                'mem': req['mem'],
+        tmp_svc = {
+            'apiVersion': 'v1',
+            'kind': 'Service',
+            'metadata': {
+                'name': req['AppName'],
+                'labels': req['AppName'],
             },
-            'service':{
-                'port':80,
-                'nodeport':8080,
-            }
+            'spec': {
+                'type': 'NodePort',
+                'ports': {
+                    'port': req['port'],
+                    'protocol': 'TCP',
+                    'targetPort': req['targetPort']
+                },
+                'selector': {
+                    'app': req['AppName']
+                },
+            },
         }
-        f = open('newtree.yaml', "w")
-        new = yaml.dump(tmp,f)
+        tmp_Deployment = {
+            'apiVersion': 'extensions/v1beta1',
+            'kind': 'Deployment',
+            'metadata': {
+                'name': req['AppName'],
+            },
+            'spec': {
+                'replicas': req['replicas'],
+                'template': {
+                    'metadata': {
+                        'name': req['AppName'],
+                    },
+                    'spec': {
+                        'nodeName': req['node'],
+                        'containers': {
+                            'name': req['AppName'],
+                            'image': req['image'],
+                            'resources': {
+                                'cpu': req['cpu'],
+                                'mem': req['mem'],
+                            },
+                        },
+                    },
+                },
+            },
+        }
+        f = open('svc.yaml', "w")
+        svc = yaml.dump(tmp_svc, f, default_flow_style=False)
         f.close()
-        print(new)
-        return HttpResponse('ok')
+
+        newf = open('deployment.yaml', "w")
+        Deployment = yaml.dump(tmp_Deployment, newf, default_flow_style=False)
+        newf.close()
+        return HttpResponse('successful')
     else:
 
         return render(request, 'cloud/format.html')
+
+
+def cloud_management(request):
+    namespace_res = requests.get('http://10.10.30.102:8080/api/v1/namespaces')
+    namespace_res = json.loads(namespace_res.content.decode('utf-8'))
+    namespace_status = {}
+    for i in namespace_res['items']:
+        namespace_status[i['metadata']['name']] = i['status']['phase']
+    if request.method == 'POST':
+        name = request.POST.get('name')
+
+        if request.POST.get('type') == 'Pods':
+            url = 'http://10.10.30.102:8080/api/v1/namespaces/' + name + '/pods'
+            print('new', url)
+            res = requests.get(url)
+            res = json.loads(res.content.decode('utf-8'))
+            pod_status = {}
+            for i in res['items']:
+                pod_status[i["metadata"]["name"]] = i["status"]["phase"]
+            print(pod_status)
+            return HttpResponse(json.dumps(pod_status))
+        elif request.POST.get('type') == 'Services':
+            url = 'http://10.10.30.102:8080/api/v1/namespaces/' + name + '/services'
+            print('new', url)
+            res = requests.get(url)
+            res = json.loads(res.content.decode('utf-8'))
+            # print(res)
+
+            pod_status = {}
+            for i in res['items']:
+                print(i)
+                pod_status[i["metadata"]["name"]] = i["metadata"]["namespace"]
+            print(pod_status)
+            return HttpResponse(json.dumps(pod_status))
+
+        else:
+            url = 'http://10.10.30.102:8080/api/v1/namespaces/' + name + '/deployments'
+
+    else:
+        url = 'http://10.10.30.102:8080/api/v1/namespaces/default/pods'
+        res = requests.get(url)
+        res = json.loads(res.content.decode('utf-8'))
+        # print(res)
+
+        pod_status = {}
+        for i in res['items']:
+            pod_status[i["metadata"]["name"]] = i["status"]["phase"]
+        print(pod_status)
+
+        return render(request, 'cloud/management.html',
+                      {'pod_status': pod_status, 'namespace_status': namespace_status})

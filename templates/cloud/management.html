@@ -15,26 +15,32 @@
     <div class="box-header with-border">
         <h3 class="box-title">检查服务</h3>
     </div>
-    <!-- /.box-header -->
     <div class="box-body">
-        <div class="box-body table-responsive no-padding">
-            <select id="namespace" >
-                {% for name,status in namespace_status.items %}
-                    <option >{{ name }}</option>
-                {% endfor %}
-            </select>
-            <button class="btn-default" onclick="Space(this)">Enter</button>
-            <table class="table table-hover">
-                <tbody>
+        <select class="" id="namespace">
+            {% for name,status in namespace_status.items %}
+                <option>{{ name }}</option>
+            {% endfor %}
+        </select>
 
-                {% for pod,status in pod_status.items %}
-                    <tr>
-                        <td>{{ pod }}</td>
-                        <td><span class="label label-success">{{ status }}</span></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <ul id="myTab" class="nav nav-tabs">
+
+            <li><a href="#Deployments" data-toggle="tab" onclick="GetInfo(this)">Deployments</a>
+            </li>
+            <li><a href="#Pods" data-toggle="tab" onclick="GetInfo(this)">Pods</a></li>
+            <li><a href="#Services" data-toggle="tab" onclick="GetInfo(this)">Services</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="Deployments">
+            </div>
+            <div class="tab-pane fade" id="Pods">
+                {#                <table class="table table-bordered table-hover dataTable">#}
+                {#                    <thead>#}
+                {#                    </thead>#}
+                {#                </table>#}
+            </div>
+            <div class="tab-pane fade" id="Services">
+            </div>
+
         </div>
     </div>
 
@@ -44,23 +50,39 @@
 {% block bottom-js %}
 
     <script>
-     function Space(obj){
-         var name = $("#namespace").val();
-            console.log(name)
+
+        function GetInfo(obj) {
+            var namespace = $("#namespace").val();
+            console.log(namespace)
+            var type = $(obj).text();
+            console.log(type);
             $.ajax({
                 url: "/cloud/management/",
                 type: 'POST',
-                dataType:'json',
-                data: {type: 'query', name: name},
-                success: function (data) {
-                    console.log(data);
-                    var tmp = JSON.parse(data);
-                    console.log(tmp)
+                data: {type: type, name: namespace},
+                success: function (res) {
+                    var new_name_space = namespace;
+                    $('#name_space').val(new_name_space);
+                    var json = jQuery.parseJSON(res);
+                    $("#" + type).empty();
+                    console.log(json)
+
+                    $("#" + type).append('<table class="table table-bordered table-hover dataTable"><tbody>')
+                    for (var p in json) {
+                        pod_html = "<tr>" + "<td>" + p + "</td>" + '<td><span class="label label-success">' + json + "</span></td>" + "</tr>"
+                        $('#' + type + "> table > tbody").append(pod_html);
+                    }
+                    $("#" + type).append("</tbody></table>");
+
+
                 }
             })
-     }
+        }
+        ;
+
 
     </script>
+
 
 
 {% endblock %}
